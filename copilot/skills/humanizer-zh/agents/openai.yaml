@@ -1,0 +1,4 @@
+interface:
+  display_name: "中文知识笔记去 AI 味"
+  short_description: "把零散材料整理成工程文档风格的知识笔记，保留事实与事实层级，去除模板腔和 AI 腔"
+  default_prompt: "Use $humanizer-zh to organize this scattered material into a Chinese knowledge note in engineering-document style, preserving every fact, term, number, link, and fact-level distinction."
