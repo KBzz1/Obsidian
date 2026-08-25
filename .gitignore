@@ -1,0 +1,24 @@
+# Obsidian 工作区状态（UI 布局，频繁变化，不入库）
+.obsidian/workspace.json
+
+# Obsidian 插件数据（可能含 API Key / token，不入库）
+.obsidian/plugins/*/data.json
+.obsidian/plugins/*/data.json.bak
+
+# Obsidian 回收站 / 缓存
+.obsidian/trash/
+.obsidian/cache/
+
+# AI 工具附属目录（非知识库正文，三处重复）
+.claude/
+.agents/
+.opencode/
+
+# 系统 / 编辑器 / 临时
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# Obsidian 社区插件本体与数据（可经插件市场重装；data.json 可能含 token）
+.obsidian/plugins/

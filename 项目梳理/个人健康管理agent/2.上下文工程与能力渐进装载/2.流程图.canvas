@@ -1,0 +1,31 @@
+{
+	"nodes":[
+		{"id":"g1","type":"group","x":-1500,"y":-1250,"width":800,"height":520,"label":"① 输入与状态"},
+		{"id":"g2","type":"group","x":-500,"y":-1250,"width":800,"height":520,"label":"② 投影与装配"},
+		{"id":"g3","type":"group","x":400,"y":-1250,"width":1000,"height":900,"label":"③ 模型调用与收敛"},
+		{"id":"g4","type":"group","x":-1500,"y":-450,"width":2300,"height":400,"label":"④ 回写与按需"},
+		{"id":"title","type":"text","text":"**个人健康管理agent · 上下文工程与能力渐进装载总览**\n\n调用大模型时模型能看到什么 · 谁来生成模型输入 · 状态栏怎么投影 · 超过预算怎么整理 · 能力按域怎么装载\n\n> 点击节点内蓝/紫底色的概念引用，可直接跳到第二章对应概念笔记。","x":-250,"y":-1450,"width":1900,"height":140,"color":"6"},
+		{"id":"user_req","type":"text","text":"**用户请求**\n\n本轮自然语言输入\n\n[[3.上下文装配器与 ContextPolicy#装配链路|上下文装配链路]]","x":-1400,"y":-1150,"width":280,"height":120,"color":"4"},
+		{"id":"runtime","type":"text","text":"**运行时 · 状态图当前执行节点**\n\n系统保存的完整事实：状态 / 检查点 / 消息轨迹 / 工具结果 / 任务产物\n\n≠ 每次都全量发给模型\n\n[[3.上下文装配器与 ContextPolicy#为什么需要装配器|为什么需要上下文装配器]]","x":-1400,"y":-930,"width":460,"height":230,"color":"2"},
+		{"id":"status","type":"text","text":"**当前工作状态栏**（确定性投影）\n\n执行议程 / 事件侧信道 / 环境状态 / 能力状态\n\n同状态同结果，不经大模型\n\n[[4.AgentStatus 当前工作状态栏#状态栏是什么|当前工作状态栏#状态栏是什么]]","x":-400,"y":-1150,"width":400,"height":180,"color":"5"},
+		{"id":"assembler","type":"text","text":"**上下文装配器**\n\n按当前节点上下文策略 + 能力作用域挑选本轮可见数据；只读状态\n\n[[3.上下文装配器与 ContextPolicy#装配接口|上下文装配器#装配接口]]\n[[3.上下文装配器与 ContextPolicy#装配链路|上下文装配链路]]","x":-400,"y":-880,"width":420,"height":210,"color":"6"},
+		{"id":"compact","type":"text","text":"**约 20 万令牌确定性整理**\n\n保留/裁剪清单；默认程序化，不默认大模型摘要\n\n[[6.历史轨迹与上下文整理#为什么设 200k 预算|历史轨迹与上下文整理#预算]]","x":500,"y":-1160,"width":400,"height":160,"color":"3"},
+		{"id":"kv","type":"text","text":"**键值缓存布局**\n\n稳定前缀（不动）在前 / 动态尾部（状态栏、用户输入）在后\n\n[[7.KV Cache 与上下文布局#分层布局|键值缓存与上下文布局#分层布局]]","x":950,"y":-1160,"width":330,"height":160,"color":"3"},
+		{"id":"model_ctx","type":"text","text":"**模型上下文** — 模型本轮真正看到\n\n稳定（系统提示/固定规则/工具模式） + 必要历史 + 任务产物/工具结果 + 派生上下文 + 状态栏 + 用户输入\n\n[[7.KV Cache 与上下文布局#分层布局|键值缓存与上下文布局#分层布局]]","x":500,"y":-880,"width":500,"height":200,"color":"6"},
+		{"id":"llm","type":"text","text":"**大语言模型**\n\n输出：新消息 / 工具调用 / 状态变化","x":1120,"y":-820,"width":220,"height":150,"color":"4"},
+		{"id":"writeback","type":"text","text":"**写回运行时**\n\n消息 / 工具调用 / 状态变化 → 状态 / 检查点 / 产物\n\n[[3.上下文装配器与 ContextPolicy#装配链路|上下文装配链路]]","x":-1400,"y":-350,"width":380,"height":170,"color":"2"},
+		{"id":"planner","type":"text","text":"**规划器旁路**（仅复杂动态任务）\n\n只生成执行计划；进度由状态存，经执行议程投影\n\n[[9.Planner 按需规划#触发条件|规划器按需规划#触发条件]]\n[[9.Planner 按需规划#固定流程不需要 Planner|规划器按需规划#固定流程不需要规划]]","x":-900,"y":-350,"width":380,"height":170,"color":"3"}
+	],
+	"edges":[
+		{"id":"e01","fromNode":"user_req","fromSide":"bottom","toNode":"runtime","toSide":"top","label":"触发"},
+		{"id":"e02","fromNode":"runtime","fromSide":"right","toNode":"status","toSide":"left","label":"确定性投影"},
+		{"id":"e03","fromNode":"status","fromSide":"bottom","toNode":"assembler","toSide":"top","label":"读状态"},
+		{"id":"e04","fromNode":"assembler","fromSide":"right","toNode":"model_ctx","toSide":"left","label":"能力渐进装载：按业务域装配本域技能/工具"},
+		{"id":"e05","fromNode":"model_ctx","fromSide":"right","toNode":"llm","toSide":"left","label":"本轮输入"},
+		{"id":"e06","fromNode":"llm","fromSide":"bottom","toNode":"writeback","toSide":"right","label":"输出"},
+		{"id":"e07","fromNode":"writeback","fromSide":"top","toNode":"runtime","toSide":"bottom","label":"写回闭环"},
+		{"id":"e08","fromNode":"runtime","fromSide":"right","toNode":"planner","toSide":"top","label":"仅复杂任务触发"},
+		{"id":"e09","fromNode":"compact","fromSide":"bottom","toNode":"model_ctx","toSide":"top","label":"约 20 万令牌触发整理"},
+		{"id":"e10","fromNode":"kv","fromSide":"bottom","toNode":"model_ctx","toSide":"top","label":"按此布局"}
+	]
+}

@@ -1,0 +1,25 @@
+filters:
+  and:
+    - file.hasTag("项目/个人健康管理agent")
+    - file.ext == "md"
+properties:
+  章节:
+    displayName: 章节
+  类型:
+    displayName: 类型
+  核心概念:
+    displayName: 核心概念
+  状态:
+    displayName: 状态
+views:
+  - type: table
+    name: 全项目笔记
+    groupBy:
+      property: 章节
+      direction: ASC
+    order:
+      - file.name
+      - 章节
+      - 类型
+      - 核心概念
+      - 状态

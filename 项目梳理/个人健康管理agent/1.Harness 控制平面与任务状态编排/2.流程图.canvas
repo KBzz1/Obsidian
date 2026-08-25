@@ -1,0 +1,43 @@
+{
+	"nodes":[
+		{"id":"g3","type":"group","x":800,"y":-940,"width":1200,"height":1030,"label":"③ 任务执行"},
+		{"id":"g2","type":"group","x":-1120,"y":-840,"width":1340,"height":720,"label":"② 请求执行"},
+		{"id":"g4","type":"group","x":-840,"y":600,"width":1780,"height":400,"label":"④ 状态与持久化"},
+		{"id":"g1","type":"group","x":-720,"y":-1360,"width":560,"height":420,"label":"① 入口与路由"},
+		{"id":"supervisor","type":"text","text":"**会话主管**\n\n路由决策（第五章收回，不再设独立路由）\n\n判断：直接回答 / 调用共享能力 / 委派\n\n当前请求交给谁？\n\n训练智能体 / 饮食智能体 / 每日计划（→ 任务控制器）\n\n[[4.Supervisor 架构与委派#不设独立 Router|不设独立路由]]\n[[3.执行模型与任务边界#路由：由 Supervisor 决策|路由：由会话主管决策]]","x":-880,"y":-790,"width":840,"height":250,"color":"5"},
+		{"id":"title","type":"text","text":"**个人健康管理agent · Harness 控制平面与任务生命周期总览**\n\n普通请求怎么执行 · 每日计划怎么变成任务 · 怎么暂停 · 对话为什么还能继续 · 卡片怎么恢复 · 四种状态分别存放哪里\n\n> 点击节点内蓝/紫底色的概念引用，可直接跳到第一章对应概念笔记。","x":-970,"y":-1640,"width":1500,"height":140,"color":"6"},
+		{"id":"user","type":"text","text":"**用户**\n\n发起自然语言请求，或确认/操作已生成的卡片。\n\n[[4.Conversation 与 Task 生命周期#身份模型|会话与任务生命周期#身份模型]]","x":-550,"y":-1300,"width":180,"height":80,"color":"1"},
+		{"id":"chat","type":"text","text":"**聊天消息**\n\n自然语言入口。\n\n[[3.执行模型与任务边界#控制平面职责|执行模型与任务边界#控制平面职责]]","x":-660,"y":-1150,"width":400,"height":130,"color":"5"},
+		{"id":"hil_note","type":"text","text":"**人工介入**\n\n中断\n↓\n等待人工确认\n↓\n恢复\n\n[[6.HIL 与恢复#中断协议（Interrupt）|人工介入与恢复#中断协议]]\n[[6.HIL 与恢复#持久检查点的必要性|人工介入与恢复#持久检查点]]","x":1600,"y":-285,"width":320,"height":290,"color":"2"},
+		{"id":"dailyplan","type":"text","text":"**每日计划任务**\n\n任务级工作流（训练领域）\n\n运行中 → 草稿就绪 → 中断 → 等待人工确认 → 恢复 → 运行中 → 已完成\n\n修改 / 保存 / 放弃\n\n[[4.Conversation 与 Task 生命周期#任务状态机|会话与任务生命周期#任务状态机]]\n[[6.HIL 与恢复#可重放性约束|人工介入与恢复#可重放性约束]]","x":840,"y":-275,"width":480,"height":280,"color":"6"},
+		{"id":"workout","type":"text","text":"**训练智能体**\n\n请求级\n单次请求内完成\n\n[[3.执行模型与任务边界#执行单元与编排方式|执行模型与任务边界#执行单元与编排方式]]","x":-970,"y":-360,"width":300,"height":180,"color":"5"},
+		{"id":"tj_note","type":"text","text":"**校验任务 / 版本 / 有效期**\n\n恢复前检查版本\n\n[[7.版本控制与并发#旧卡片的乐观并发控制（OCC）|版本控制与并发#乐观并发控制]]\n[[4.Conversation 与 Task 生命周期#过期策略|会话与任务生命周期#过期策略]]","x":1580,"y":-840,"width":340,"height":150,"color":"2"},
+		{"id":"card","type":"text","text":"**卡片操作**\n\n携带任务标识\n\n[[6.HIL 与恢复#卡片投递与事实来源|人工介入与恢复#卡片投递]]","x":910,"y":-915,"width":340,"height":150,"color":"2"},
+		{"id":"diet","type":"text","text":"**饮食智能体**\n\n请求级\n单次请求内完成\n\n[[3.执行模型与任务边界#执行单元与编排方式|执行模型与任务边界#执行单元与编排方式]]","x":-610,"y":-360,"width":300,"height":180,"color":"5"},
+		{"id":"dp_req","type":"text","text":"**每日计划**\n\n创建长任务请求\n训练领域工作流\n\n[[3.执行模型与任务边界#升级为持久任务的标准|执行模型与任务边界#升级为持久任务的标准]]","x":-250,"y":-360,"width":360,"height":180,"color":"5"},
+		{"id":"intr_note","type":"text","text":"**任务中断 ≠ 对话中断**\n\n对话 ─────────────────────────────────>\n\n任务 T100\n运行中 → 等待人工确认 ──────────────┐\n                                    │\n新消息 → 饮食智能体 → 响应           │\n                                    │\n卡片确认 → 恢复 T100 ◄──────────────┘\n\n每日计划等待确认时，用户仍可继续普通训练 / 饮食请求。\n\n[[4.Conversation 与 Task 生命周期#活跃任务约束|会话与任务生命周期#活跃任务约束]] · [[8.一次完整的 DailyPlan#中断期间切换话题|一次完整的每日计划#中断期间切换话题]]","x":1100,"y":180,"width":820,"height":370,"color":"6"},
+		{"id":"draft","type":"text","text":"**草稿存储**\n\n草稿标识\n草稿版本\n可编辑计划\n\n当前正在编辑什么？\n\n[[5.Task Runtime、Checkpoint 和业务状态#四层状态分层|任务运行时与状态#四层状态分层]]","x":160,"y":640,"width":240,"height":300,"color":"1"},
+		{"id":"cp","type":"text","text":"**状态图检查点**\nPostgreSQL\n\n图状态\n执行位置\n待恢复的中断\n\n从哪里恢复执行？\n后端重启后仍可恢复\n\n[[5.Task Runtime、Checkpoint 和业务状态#LangGraph 检查点语义|任务运行时与状态#检查点语义]]\n[[6.HIL 与恢复#持久检查点的必要性|人工介入与恢复#持久检查点]]","x":-320,"y":640,"width":400,"height":300},
+		{"id":"reg","type":"text","text":"**任务运行时登记表**\nPostgreSQL\n\n任务标识\n当前状态\n任务版本\n过期时间\n\n当前哪个任务是活跃的？\n一个对话最多一个活跃任务\n\n[[5.Task Runtime、Checkpoint 和业务状态#agent_task_runtime 控制索引|任务运行时与状态#运行时登记表]]\n[[7.版本控制与并发#单个活跃任务的数据库约束|版本控制与并发#活跃任务约束]]","x":-800,"y":640,"width":400,"height":300,"color":"6"},
+		{"id":"biz","type":"text","text":"**业务数据库**\n\n已确认计划\n训练记录\n\n什么已经正式成立？\n\n[[5.Task Runtime、Checkpoint 和业务状态#四层状态分层|任务运行时与状态#四层状态分层]]","x":640,"y":640,"width":220,"height":300,"color":"4"},
+		{"id":"tc","type":"text","text":"**任务控制器**\n\n创建 / 恢复 / 校验\n\n任务身份 · 版本 · 有效期\n\n[[6.HIL 与恢复#恢复流程与校验|人工介入与恢复#恢复流程与校验]]\n[[7.版本控制与并发#状态切换事务|版本控制与并发#状态切换事务]]","x":920,"y":-580,"width":320,"height":220,"color":"6"}
+	],
+	"edges":[
+		{"id":"e01","fromNode":"user","fromSide":"bottom","toNode":"chat","toSide":"top"},
+		{"id":"e02","fromNode":"user","fromSide":"right","toNode":"card","toSide":"left","label":"卡片确认"},
+		{"id":"e03","fromNode":"chat","fromSide":"bottom","toNode":"supervisor","toSide":"top","label":"进入编排路由"},
+		{"id":"e04","fromNode":"supervisor","fromSide":"bottom","toNode":"workout","toSide":"top","label":"训练智能体"},
+		{"id":"e05","fromNode":"supervisor","fromSide":"bottom","toNode":"diet","toSide":"top","label":"饮食智能体"},
+		{"id":"e06","fromNode":"supervisor","fromSide":"bottom","toNode":"dp_req","toSide":"top","label":"每日计划"},
+		{"id":"e07","fromNode":"dp_req","fromSide":"right","toNode":"tc","toSide":"top","label":"任务控制器"},
+		{"id":"e08","fromNode":"card","fromSide":"bottom","toNode":"tc","toSide":"top","label":"携带任务标识"},
+		{"id":"e09","fromNode":"tj_note","fromSide":"left","toNode":"tc","toSide":"right","label":"校验任务/版本/有效期"},
+		{"id":"e10","fromNode":"tc","fromSide":"bottom","toNode":"dailyplan","toSide":"top","label":"创建 / 恢复"},
+		{"id":"e11","fromNode":"tc","fromSide":"left","toNode":"reg","toSide":"top","label":"查询 / 更新"},
+		{"id":"e12","fromNode":"dailyplan","fromSide":"left","toNode":"cp","toSide":"top","label":"检查点 / 恢复"},
+		{"id":"e13","fromNode":"dailyplan","fromSide":"bottom","toNode":"draft","toSide":"top","label":"草稿读取 / 修改"},
+		{"id":"e14","fromNode":"draft","fromSide":"right","toNode":"biz","toSide":"left","label":"确认"},
+		{"id":"e15","fromNode":"dailyplan","fromSide":"right","toNode":"hil_note","toSide":"left","label":"人工介入 / 中断"},
+		{"id":"e16","fromNode":"dailyplan","fromSide":"bottom","toNode":"intr_note","toSide":"top","label":"T100 = 等待人工确认"}
+	]
+}
