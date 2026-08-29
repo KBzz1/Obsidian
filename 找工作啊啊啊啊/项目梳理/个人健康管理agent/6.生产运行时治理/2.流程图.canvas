@@ -1,0 +1,32 @@
+{
+	"nodes":[
+		{"id":"c6g10000000000001","type":"group","x":-40,"y":-500,"width":620,"height":500,"color":"5","label":"① 准入与预算"},
+		{"id":"c6g30000000000003","type":"group","x":780,"y":-500,"width":700,"height":440,"color":"4","label":"③ 有限并发执行"},
+		{"id":"c6g40000000000004","type":"group","x":780,"y":0,"width":700,"height":420,"color":"5","label":"④ 外部依赖与熔断"},
+		{"id":"c6g20000000000002","type":"group","x":-40,"y":60,"width":620,"height":360,"color":"6","label":"② 排队与调度"},
+		{"id":"c6hdr0000000000001","type":"text","text":"**生产运行时治理主流程**\n\n任务从到达、准入、排队、执行，到外部依赖访问与熔断的完整治理链路。","x":360,"y":-720,"width":820,"height":110,"color":"6"},
+		{"id":"c6n60000000000006","type":"text","text":"**有限并发 / 执行槽位**\n\n模型 API / 外部工具 / 后台任务\n并发上限（Semaphore）\n\n[[5.任务队列、优先级与有限并发|有限并发]]","x":830,"y":-460,"width":560,"height":130,"color":"4"},
+		{"id":"c6n70000000000007","type":"text","text":"**智能体 / 工具运行时执行**\n\n领域智能体 / 工具运行时\n人工介入等待时释放执行槽位\n\n[[4.统一 Tool Runtime|工具运行时]]","x":830,"y":-300,"width":560,"height":130,"color":"4"},
+		{"id":"c6n80000000000008","type":"text","text":"**模型 API / 外部工具 / 数据库**\n\n第三方模型服务 / 外部工具 / 存储","x":830,"y":40,"width":560,"height":100,"color":"5"},
+		{"id":"c6n90000000000009","type":"text","text":"**依赖健康信号**\n\n延迟 / Timeout / 429 / 5xx","x":830,"y":160,"width":560,"height":90,"color":"5"},
+		{"id":"c6na000000000000a","type":"text","text":"**服务级熔断**\n\n连续失败达阈值 → 熔断\n→ 冷却 → 探测 → 恢复 / 继续熔断\n\n[[7.外部依赖保护与服务级熔断|服务级熔断]]","x":830,"y":270,"width":560,"height":120,"color":"5"},
+		{"id":"c6nb000000000000b","type":"text","text":"**旁注 · 运行指标记录**\n\n任务数量 / 队列长度\n依赖错误率 / 熔断状态\n\n贯穿整个治理过程\n\n[[8.轻量运行监控|轻量运行监控]]","x":1700,"y":-400,"width":380,"height":260,"color":"6"},
+		{"id":"c6n30000000000003","type":"text","text":"**任务预算绑定**\n\nmax_llm_calls / max_tool_invocations\n/ max_active_runtime\n\n[[4.任务预算与任务准入|任务预算]]","x":30,"y":-210,"width":480,"height":150,"color":"5"},
+		{"id":"c6n10000000000001","type":"text","text":"**任务到达**\n\n用户请求 / 上游工作流 / 后台任务","x":30,"y":-460,"width":480,"height":80,"color":"5"},
+		{"id":"c6n20000000000002","type":"text","text":"**任务准入**\n\n检查当前用户运行中任务数\n与系统任务队列容量\n\n[[4.任务预算与任务准入|任务准入]]","x":30,"y":-350,"width":480,"height":110,"color":"5"},
+		{"id":"c6n40000000000004","type":"text","text":"**任务队列**\n\n保存暂时无法执行的任务\n\n[[5.任务队列、优先级与有限并发|任务队列]]","x":30,"y":100,"width":480,"height":100,"color":"6"},
+		{"id":"c6n50000000000005","type":"text","text":"**执行优先级 / 背压**\n\n交互任务优先，后台任务随后\n队列压力高时延后后台任务\n\n[[6.背压|背压]]","x":30,"y":230,"width":480,"height":130,"color":"6"}
+	],
+	"edges":[
+		{"id":"c6e10000000000001","fromNode":"c6n10000000000001","fromSide":"bottom","toNode":"c6n20000000000002","toSide":"top"},
+		{"id":"c6e20000000000002","fromNode":"c6n20000000000002","fromSide":"bottom","toNode":"c6n30000000000003","toSide":"top"},
+		{"id":"c6e30000000000003","fromNode":"c6n30000000000003","fromSide":"bottom","toNode":"c6n40000000000004","toSide":"top"},
+		{"id":"c6e40000000000004","fromNode":"c6n40000000000004","fromSide":"bottom","toNode":"c6n50000000000005","toSide":"top"},
+		{"id":"c6e50000000000005","fromNode":"c6n50000000000005","fromSide":"top","toNode":"c6n40000000000004","toSide":"bottom","label":"过载时限制进入"},
+		{"id":"c6e60000000000006","fromNode":"c6n50000000000005","fromSide":"right","toNode":"c6n60000000000006","toSide":"left","label":"取得执行槽位"},
+		{"id":"c6e70000000000007","fromNode":"c6n60000000000006","fromSide":"bottom","toNode":"c6n70000000000007","toSide":"top"},
+		{"id":"c6e80000000000008","fromNode":"c6n70000000000007","fromSide":"bottom","toNode":"c6n80000000000008","toSide":"top"},
+		{"id":"c6e90000000000009","fromNode":"c6n80000000000008","fromSide":"bottom","toNode":"c6n90000000000009","toSide":"top"},
+		{"id":"c6ea000000000000a","fromNode":"c6n90000000000009","fromSide":"bottom","toNode":"c6na000000000000a","toSide":"top"}
+	]
+}
