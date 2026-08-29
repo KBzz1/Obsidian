@@ -1,0 +1,40 @@
+{
+	"nodes":[
+		{"id":"g1","type":"group","x":-1800,"y":-1300,"width":1520,"height":700,"label":"① 写侧：事件 → 记忆"},
+		{"id":"g4","type":"group","x":-160,"y":-480,"width":1320,"height":620,"label":"④ 装配与下游"},
+		{"id":"g2","type":"group","x":-160,"y":-1300,"width":1120,"height":700,"label":"② 巩固与画像（后台）"},
+		{"id":"g3","type":"group","x":-1520,"y":-480,"width":1240,"height":620,"label":"③ 读侧：按需检索"},
+		{"id":"episodic","type":"text","text":"**情节记忆**\n\n只追加 · 保留时间与来源\n\n[[4.长期记忆语义模型#情节记忆：记录发生过什么|情节记忆]]\n[[5.记忆卡片与持久化模型|记忆卡片]]","x":-980,"y":-840,"width":470,"height":200,"color":"2"},
+		{"id":"extraction","type":"text","text":"**批次记忆抽取**\n\n只看有没有值得长期保存的事件\n结构 / 归属 / 幂等校验\n→ 情节候选\n\n[[6.记忆写入与生命周期#抽取的批次视野与职责|抽取的职责]]","x":-1020,"y":-1270,"width":470,"height":200,"color":"6"},
+		{"id":"event","type":"text","text":"**会话 / 领域信号**\n\n用户事件、领域信号\n\n[[3.模块定位与职责边界#四类数据来源|四类数据来源]]","x":-1540,"y":-1265,"width":360,"height":130,"color":"4"},
+		{"id":"buffer","type":"text","text":"**记忆事件缓冲**\n\nPostgres 持久化 · 跨线程\n达到刷新条件再抽取\n\n[[6.记忆写入与生命周期#事件缓冲：先落地再批量抽取|事件缓冲]]","x":-1500,"y":-1040,"width":280,"height":160,"color":"2"},
+		{"id":"hotpath","type":"text","text":"**关键事实热路径**（旁路）\n\n安全信息 / 需长期记住 / 关键画像状态\n立即抽取 → 立即投影画像\n\n[[6.记忆写入与生命周期#关键事实热路径|热路径]]","x":-1540,"y":-820,"width":360,"height":180,"color":"3"},
+		{"id":"consolidator","type":"text","text":"**语义巩固**（后台）\n\n按 state_key · 只读相关范围\n输出 NO_CHANGE / NEW_SEMANTIC / SUPERSEDE / UNCERTAIN\n\n[[7.语义巩固与用户画像#语义巩固|语义巩固]]","x":-30,"y":-1270,"width":470,"height":210,"color":"6"},
+		{"id":"semantic","type":"text","text":"**语义记忆**\n\n版本化 · derived_from 追溯\n\n[[4.长期记忆语义模型#语义记忆：形成长期认知|语义记忆]]","x":25,"y":-810,"width":360,"height":170,"color":"6"},
+		{"id":"profile","type":"text","text":"**用户画像**\n\n当前读取视图 · 可变\n权威 / 派生两类来源\n画像投影尽量确定性\n\n[[7.语义巩固与用户画像#用户画像：当前状态的读取视图|用户画像]]","x":620,"y":-1030,"width":260,"height":220,"color":"5"},
+		{"id":"llm","type":"text","text":"**大模型上下文**\n\n模型本轮真正看到","x":570,"y":-100,"width":360,"height":140,"color":"4"},
+		{"id":"assembler","type":"text","text":"**第二章 上下文装配器**\n\n决定哪些进本轮上下文 · 顺序 · 令牌预算\n\n[[3.上下文装配器与 ContextPolicy|上下文装配器（第二章）]]","x":570,"y":-420,"width":340,"height":190,"color":"5"},
+		{"id":"bundle","type":"text","text":"**证据包**\n\nprofile / memories / business_facts / knowledge / artifacts / conflicts\n\n[[9.证据装配与失败语义#证据包：第三章的对外产物|证据包]]","x":-65,"y":-100,"width":360,"height":180,"color":"6"},
+		{"id":"evidence","type":"text","text":"**证据装配**\n\n统一格式 · 保留出处 · 标记有效性 · 识别冲突\n\n[[9.证据装配与失败语义#证据包：第三章的对外产物|证据包]]","x":-37,"y":-390,"width":305,"height":160,"color":"6"},
+		{"id":"retriever","type":"text","text":"**检索协调器**\n\n用户记忆三路：结构化 / 向量 / 词法\n领域知识：结构化优先\n业务事实：直接查业务服务\n\n[[8.证据检索|证据检索]]","x":-970,"y":-160,"width":460,"height":230,"color":"6"},
+		{"id":"task","type":"text","text":"**当前领域任务**\n\n会话主管 / 领域智能体\n按需判断要不要用户信息或领域知识\n\n[[3.模块定位与职责边界#与多智能体的权限边界|按需检索]]","x":-935,"y":-440,"width":380,"height":150,"color":"4"},
+		{"id":"srcs","type":"text","text":"**召回来源**\n\n→ 用户画像\n→ 情节 / 语义记忆\n→ 业务数据库（业务服务）\n→ 领域知识\n→ 上游产物","x":-1380,"y":-320,"width":260,"height":220,"color":"2"},
+		{"id":"title","type":"text","text":"**个人健康管理agent · 长期记忆、知识 RAG 与证据装配总览**\n\n写侧：事件怎么落成记忆 · 巩固：多段经历怎么形成长期认知 · 读侧：当前任务按需取什么 · 装配：四类信息怎么统一交给下游\n\n> 点击节点内蓝/紫底色的概念引用，可直接跳到第三章对应概念笔记。","x":-1120,"y":-1520,"width":1700,"height":150,"color":"6"}
+	],
+	"edges":[
+		{"id":"e01","fromNode":"event","fromSide":"bottom","toNode":"buffer","toSide":"top","label":"先落地"},
+		{"id":"e02","fromNode":"event","fromSide":"left","toNode":"hotpath","toSide":"left","label":"关键事实旁路"},
+		{"id":"e03","fromNode":"buffer","fromSide":"right","toNode":"extraction","toSide":"bottom","label":"达到刷新条件"},
+		{"id":"e04","fromNode":"extraction","fromSide":"bottom","toNode":"episodic","toSide":"top","label":"写入"},
+		{"id":"e05","fromNode":"hotpath","fromSide":"right","toNode":"episodic","toSide":"left","label":"立即落库"},
+		{"id":"e06","fromNode":"episodic","fromSide":"right","toNode":"consolidator","toSide":"left","label":"state_key 置 dirty"},
+		{"id":"e07","fromNode":"consolidator","fromSide":"bottom","toNode":"semantic","toSide":"top","label":"新增 / 替代版本"},
+		{"id":"e08","fromNode":"semantic","fromSide":"right","toNode":"profile","toSide":"left","label":"画像投影"},
+		{"id":"e09","fromNode":"hotpath","fromSide":"top","toNode":"profile","toSide":"left","label":"立即投影"},
+		{"id":"e10","fromNode":"task","fromSide":"bottom","toNode":"retriever","toSide":"top","label":"按需触发"},
+		{"id":"e11","fromNode":"retriever","fromSide":"right","toNode":"evidence","toSide":"left","label":"召回 → 装配"},
+		{"id":"e12","fromNode":"evidence","fromSide":"bottom","toNode":"bundle","toSide":"top","label":"输出"},
+		{"id":"e13","fromNode":"bundle","fromSide":"right","toNode":"assembler","toSide":"left","label":"移交"},
+		{"id":"e14","fromNode":"assembler","fromSide":"bottom","toNode":"llm","toSide":"top","label":"本轮输入"}
+	]
+}

@@ -1,0 +1,41 @@
+{
+	"nodes":[
+		{"id":"g4","type":"group","x":-400,"y":-590,"width":1700,"height":560,"label":"④ 跨领域协作 / 产物 / 异步"},
+		{"id":"g3","type":"group","x":-400,"y":-1400,"width":1150,"height":760,"label":"③ 领域智能体委派执行"},
+		{"id":"g1","type":"group","x":-1550,"y":-1400,"width":1200,"height":680,"label":"① 入口与决策"},
+		{"id":"g2","type":"group","x":-1880,"y":-460,"width":1200,"height":430,"label":"② 直接回答与共享能力"},
+		{"id":"title","type":"text","text":"**个人健康管理agent · 多智能体协作与异步任务执行总览**\n\n会话主管怎么决策 · 什么时候直接回答 · 什么时候委派 · 领域智能体怎么执行 · 跨领域怎么协作 · 后台任务怎么接回\n\n> 点击节点内蓝/紫底色的概念引用，可直接跳到第五章对应概念笔记。","x":-250,"y":-1620,"width":1850,"height":140,"color":"6"},
+		{"id":"user","type":"text","text":"**用户**\n\n发起自然语言请求\n\n[[4.Supervisor 架构与委派#总体运行架构|会话主管架构与委派]]","x":-1450,"y":-1320,"width":200,"height":90,"color":"1"},
+		{"id":"chat","type":"text","text":"**聊天消息**\n\n自然语言入口\n\n[[4.Supervisor 架构与委派#总体运行架构|会话主管架构与委派]]","x":-1150,"y":-1320,"width":300,"height":90,"color":"5"},
+		{"id":"supervisor","type":"text","text":"**会话主管**\n\n主会话大语言模型智能体\n会话所有者 + 编排者\n\n决策：直接回答 / 共享能力 / 委派\n\n[[4.Supervisor 架构与委派#总体运行架构|会话主管架构与委派]]\n[[4.Supervisor 架构与委派#不设独立 Router|不设独立路由]]","x":-1450,"y":-1120,"width":750,"height":230,"color":"4"},
+		{"id":"workout","type":"text","text":"**训练智能体**\n\n领域事实与能力\n只读不改饮食智能体状态\n\n[[3.多智能体边界与升级标准#Workout 与 Diet 的边界|训练与饮食的边界]]","x":-300,"y":-1320,"width":430,"height":210,"color":"5"},
+		{"id":"diet","type":"text","text":"**饮食智能体**\n\n领域事实与能力\n只读不改训练智能体状态\n\n[[3.多智能体边界与升级标准#Workout 与 Diet 的边界|训练与饮食的边界]]","x":180,"y":-1320,"width":430,"height":210,"color":"5"},
+		{"id":"react","type":"text","text":"**ReAct / 领域工作流**\n\n开放任务 → ReAct 循环\n稳定流程 → 领域工作流\n\n[[5.Domain Agent 执行模型#稳定 SOP 沉淀为 Domain Workflow|稳定流程沉淀为领域工作流]]","x":-300,"y":-1020,"width":910,"height":210,"color":"2"},
+		{"id":"artifact","type":"text","text":"**领域产物 → 产物存储**\n\n中间 / 交付产物\n不自动成为业务事实\n\n[[6.通信协议与 Artifact#Artifact Store 与业务数据库的边界|产物存储与业务数据库的边界]]","x":-300,"y":-500,"width":440,"height":200,"color":"6"},
+		{"id":"cross","type":"text","text":"**任务依赖图 跨领域协作**\n\n依赖前置成功才可执行\n\n[[8.跨领域协作与冲突#跨领域任务与依赖判断|跨领域任务与依赖判断]]","x":180,"y":-500,"width":440,"height":200,"color":"6"},
+		{"id":"async","type":"text","text":"**异步任务**\n\n后台运行\n产物持久化 + 任务完成事件接回\n\n[[9.HIL 与异步任务#进入后台 Async Runtime 的条件|进入后台异步运行时的条件]]","x":700,"y":-500,"width":440,"height":200,"color":"3"},
+		{"id":"constraint","type":"text","text":"**跨领域约束**\n\n跨域约束不越权\n饮食智能体冲突时返回冲突\n\n[[8.跨领域协作与冲突#跨领域冲突处理|跨领域冲突处理]]","x":180,"y":-220,"width":440,"height":170,"color":"2"},
+		{"id":"needs_input","type":"text","text":"**需要输入**\n\n子智能体缺输入交回会话主管\n\n[[9.HIL 与异步任务#Subagent 不持有会话控制权|子智能体不持有会话控制权]]","x":700,"y":-220,"width":440,"height":170,"color":"2"},
+		{"id":"habit","type":"text","text":"**共享能力：习惯**\n\n创建 / 打卡 / 查状态\n\n[[3.多智能体边界与升级标准#Habit 为什么不是独立 Agent|习惯为什么不是独立智能体]]","x":-1230,"y":-370,"width":470,"height":170,"color":"5"},
+		{"id":"direct","type":"text","text":"**直接回答**\n\n常识 / 简单问题\n不依赖领域状态\n\n[[4.Supervisor 架构与委派#直接回答与委派的边界|直接回答与委派的边界]]","x":-1780,"y":-370,"width":460,"height":170,"color":"5"}
+	],
+	"edges":[
+		{"id":"e01","fromNode":"user","fromSide":"bottom","toNode":"chat","toSide":"top"},
+		{"id":"e02","fromNode":"chat","fromSide":"bottom","toNode":"supervisor","toSide":"top","label":"进入会话主管"},
+		{"id":"e03","fromNode":"supervisor","fromSide":"bottom","toNode":"direct","toSide":"top","label":"直接回答"},
+		{"id":"e04","fromNode":"supervisor","fromSide":"bottom","toNode":"habit","toSide":"left","label":"共享能力"},
+		{"id":"e05","fromNode":"supervisor","fromSide":"right","toNode":"workout","toSide":"left","label":"委派领域任务"},
+		{"id":"e06","fromNode":"supervisor","fromSide":"right","toNode":"diet","toSide":"left","label":"委派领域任务"},
+		{"id":"e07","fromNode":"workout","fromSide":"bottom","toNode":"react","toSide":"left","label":"ReAct / 调用工作流"},
+		{"id":"e08","fromNode":"diet","fromSide":"bottom","toNode":"react","toSide":"right","label":"ReAct / 调用工作流"},
+		{"id":"e09","fromNode":"react","fromSide":"bottom","toNode":"artifact","toSide":"top","label":"领域产物"},
+		{"id":"e10","fromNode":"artifact","fromSide":"left","toNode":"supervisor","toSide":"right","label":"产物接回"},
+		{"id":"e11","fromNode":"workout","fromSide":"right","toNode":"constraint","toSide":"top","label":"跨域约束"},
+		{"id":"e12","fromNode":"constraint","fromSide":"right","toNode":"supervisor","toSide":"bottom","label":"冲突收口"},
+		{"id":"e13","fromNode":"supervisor","fromSide":"right","toNode":"async","toSide":"top","label":"后台异步任务"},
+		{"id":"e14","fromNode":"async","fromSide":"bottom","toNode":"artifact","toSide":"right","label":"产物持久化"},
+		{"id":"e15","fromNode":"async","fromSide":"left","toNode":"supervisor","toSide":"bottom","label":"任务完成接回"},
+		{"id":"e16","fromNode":"supervisor","fromSide":"bottom","toNode":"needs_input","toSide":"top","label":"缺输入"},
+		{"id":"e17","fromNode":"needs_input","fromSide":"left","toNode":"user","toSide":"bottom","label":"向用户发问"}
+	]
+}

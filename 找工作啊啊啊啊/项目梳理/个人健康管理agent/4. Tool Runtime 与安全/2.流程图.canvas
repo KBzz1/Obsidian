@@ -1,0 +1,39 @@
+{
+	"nodes":[
+		{"id":"a1b2c3d4e5f62001","type":"text","x":390,"y":-700,"width":820,"height":130,"text":"**工具运行时主执行流程**\n\n智能体决定调用工具后，这个动作如何经过运行时，安全且可靠地进入真实系统，并把结果返回给智能体。","color":"6"},
+		{"id":"a1b2c3d4e5f62017","type":"group","x":100,"y":-480,"width":620,"height":520,"color":"5","label":"① 决策与提议"},
+		{"id":"a1b2c3d4e5f62018","type":"group","x":780,"y":-480,"width":820,"height":540,"color":"6","label":"② 运行时受理与护栏"},
+		{"id":"a1b2c3d4e5f62019","type":"group","x":780,"y":90,"width":820,"height":560,"color":"4","label":"③ 可靠执行与真实系统"},
+		{"id":"a1b2c3d4e5f62020","type":"group","x":100,"y":90,"width":620,"height":540,"color":"5","label":"④ 结果与返回"},
+		{"id":"a1b2c3d4e5f62002","type":"text","x":170,"y":-440,"width":480,"height":90,"text":"**用户 / 上游任务**\n\n用户请求，或上游工作流已把任务交给当前智能体。","color":"5"},
+		{"id":"a1b2c3d4e5f62003","type":"text","x":170,"y":-320,"width":480,"height":90,"text":"**会话主管 / 领域智能体**\n\n当前真正做出工具调用决策的智能体\n会话主管 / 训练智能体 / 饮食智能体","color":"5"},
+		{"id":"a1b2c3d4e5f62004","type":"text","x":170,"y":-200,"width":480,"height":140,"text":"**工具请求**\n\n智能体提出的结构化工具请求\n\n只包含业务参数 · 不包含 user_id / permission\n[[4.统一 Tool Runtime|统一工具运行时]]","color":"5"},
+		{"id":"a1b2c3d4e5f62005","type":"text","x":830,"y":-440,"width":560,"height":170,"text":"**工具运行时**（中心）\n\n统一接管所有真实工具调用 —— 中心节点\n\n[[4.统一 Tool Runtime|统一工具运行时]]","color":"6"},
+		{"id":"a1b2c3d4e5f62006","type":"text","x":830,"y":-240,"width":560,"height":130,"text":"**执行前护栏**\n\n输入校验\n权限 / 业务规则\n风险判断\n\n[[5.护栏|护栏]]","color":"5"},
+		{"id":"a1b2c3d4e5f62007","type":"text","x":830,"y":-90,"width":360,"height":110,"text":"**[是否需要人工介入?]**\n\n高风险操作是否需要人工确认","color":"2"},
+		{"id":"a1b2c3d4e5f62008","type":"text","x":1240,"y":-90,"width":330,"height":130,"text":"**人工介入 / 用户确认**\n\n确认的是这一次具体调用实例\n\n[[5.护栏#执行护栏|护栏 · 执行护栏]]","color":"2"},
+		{"id":"a1b2c3d4e5f62009","type":"text","x":830,"y":130,"width":560,"height":150,"text":"**可靠执行**\n\n超时\n幂等\n重试\n调用预算 / 止损\n\n[[6.可靠执行|可靠执行]]","color":"5"},
+		{"id":"a1b2c3d4e5f62010","type":"text","x":830,"y":320,"width":560,"height":150,"text":"**工具适配器**\n领域服务 / 业务数据库\n\n真实业务系统\n\n[[3.工具能力设计与 Tool Surface|工具能力设计与工具面]]","color":"4"},
+		{"id":"a1b2c3d4e5f62011","type":"text","x":830,"y":500,"width":560,"height":80,"text":"**执行结果核验**\n\n核验真实效果\n\n[[6.可靠执行#执行结果核验|可靠执行 · 核验]]","color":"5"},
+		{"id":"a1b2c3d4e5f62012","type":"text","x":170,"y":130,"width":480,"height":130,"text":"**输出护栏**\n\n敏感信息过滤（个人隐私 / 密钥）\n输出验证\n显式截断\n\n[[5.护栏#输出护栏|护栏 · 输出护栏]]","color":"5"},
+		{"id":"a1b2c3d4e5f62013","type":"text","x":170,"y":290,"width":480,"height":110,"text":"**工具结果**\n\n状态 / 数据 / 效果 / 错误\n\n[[7.Tool Result 与错误协议|工具结果与错误协议]]","color":"5"},
+		{"id":"a1b2c3d4e5f62014","type":"text","x":170,"y":430,"width":480,"height":100,"text":"**当前智能体 / 工作流**\n\n供当前任务继续决策","color":"5"},
+		{"id":"a1b2c3d4e5f62015","type":"text","x":1700,"y":-280,"width":380,"height":200,"text":"**旁注 1**\n\n智能体只有提议权\n运行时才有执行权","color":"6"},
+		{"id":"a1b2c3d4e5f62016","type":"text","x":1700,"y":-20,"width":380,"height":200,"text":"**旁注 2**\n\n副作用工具才进入\n人工介入 / 幂等 / 重试 / 核验链路","color":"6"}
+	],
+	"edges":[
+		{"id":"b1b2c3d4e5f62001","fromNode":"a1b2c3d4e5f62002","fromSide":"bottom","toNode":"a1b2c3d4e5f62003","toSide":"top"},
+		{"id":"b1b2c3d4e5f62002","fromNode":"a1b2c3d4e5f62003","fromSide":"bottom","toNode":"a1b2c3d4e5f62004","toSide":"top"},
+		{"id":"b1b2c3d4e5f62003","fromNode":"a1b2c3d4e5f62004","fromSide":"right","toNode":"a1b2c3d4e5f62005","toSide":"left","label":"动作提议"},
+		{"id":"b1b2c3d4e5f62004","fromNode":"a1b2c3d4e5f62005","fromSide":"bottom","toNode":"a1b2c3d4e5f62006","toSide":"top"},
+		{"id":"b1b2c3d4e5f62005","fromNode":"a1b2c3d4e5f62006","fromSide":"bottom","toNode":"a1b2c3d4e5f62007","toSide":"top"},
+		{"id":"b1b2c3d4e5f62006","fromNode":"a1b2c3d4e5f62007","fromSide":"right","toNode":"a1b2c3d4e5f62008","toSide":"left","label":"是"},
+		{"id":"b1b2c3d4e5f62007","fromNode":"a1b2c3d4e5f62007","fromSide":"bottom","toNode":"a1b2c3d4e5f62009","toSide":"top","label":"否"},
+		{"id":"b1b2c3d4e5f62008","fromNode":"a1b2c3d4e5f62008","fromSide":"bottom","toNode":"a1b2c3d4e5f62009","toSide":"top","label":"回到运行时"},
+		{"id":"b1b2c3d4e5f62009","fromNode":"a1b2c3d4e5f62009","fromSide":"bottom","toNode":"a1b2c3d4e5f62010","toSide":"top"},
+		{"id":"b1b2c3d4e5f62010","fromNode":"a1b2c3d4e5f62010","fromSide":"bottom","toNode":"a1b2c3d4e5f62011","toSide":"top"},
+		{"id":"b1b2c3d4e5f62011","fromNode":"a1b2c3d4e5f62011","fromSide":"left","toNode":"a1b2c3d4e5f62012","toSide":"right","label":"结果返回"},
+		{"id":"b1b2c3d4e5f62012","fromNode":"a1b2c3d4e5f62012","fromSide":"bottom","toNode":"a1b2c3d4e5f62013","toSide":"top"},
+		{"id":"b1b2c3d4e5f62013","fromNode":"a1b2c3d4e5f62013","fromSide":"bottom","toNode":"a1b2c3d4e5f62014","toSide":"top"}
+	]
+}
