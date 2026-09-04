@@ -2,12 +2,12 @@
 	"nodes":[
 		{"id":"a1b2c3d4e5f67901","type":"group","x":-160,"y":-640,"width":2100,"height":1380,"color":"4","label":"个人健康管理agent（项目）"},
 		{"id":"a1b2c3d4e5f67902","type":"file","file":"找工作啊啊啊啊/项目梳理/个人健康管理agent/项目总览.md","x":0,"y":0,"width":320,"height":160,"color":"4"},
-		{"id":"a1b2c3d4e5f67903","type":"file","file":"找工作啊啊啊啊/项目梳理/个人健康管理agent/1.Harness 控制平面与任务状态编排/1.总览.md","x":480,"y":-440,"width":360,"height":200,"color":"5"},
-		{"id":"a1b2c3d4e5f67904","type":"file","file":"找工作啊啊啊啊/项目梳理/个人健康管理agent/2.上下文工程与能力渐进装载/1.总览.md","x":920,"y":-240,"width":360,"height":200,"color":"5"},
-		{"id":"a1b2c3d4e5f67905","type":"file","file":"找工作啊啊啊啊/项目梳理/个人健康管理agent/3. 长期记忆、知识 RAG 与证据装配/1.总览.md","x":1200,"y":30,"width":360,"height":200,"color":"5"},
-		{"id":"a1b2c3d4e5f67906","type":"file","file":"找工作啊啊啊啊/项目梳理/个人健康管理agent/4. Tool Runtime 与安全/1.总览.md","x":400,"y":555,"width":360,"height":180,"color":"5"},
-		{"id":"a1b2c3d4e5f67907","type":"file","file":"找工作啊啊啊啊/项目梳理/个人健康管理agent/5.多智能体协作与异步任务执行/1.总览.md","x":960,"y":490,"width":360,"height":200,"color":"5"},
-		{"id":"a1b2c3d4e5f67908","type":"file","file":"找工作啊啊啊啊/项目梳理/个人健康管理agent/6.生产运行时治理/1.总览.md","x":1440,"y":360,"width":360,"height":200,"color":"5"}
+		{"id":"a1b2c3d4e5f67903","type":"file","file":"找工作啊啊啊啊/项目梳理/个人健康管理agent/1.跨请求的任务生命周期/1.总览.md","x":480,"y":-440,"width":360,"height":200,"color":"5"},
+		{"id":"a1b2c3d4e5f67904","type":"file","file":"找工作啊啊啊啊/项目梳理/个人健康管理agent/2.装配模型的本轮上下文/1.总览.md","x":920,"y":-240,"width":360,"height":200,"color":"5"},
+		{"id":"a1b2c3d4e5f67905","type":"file","file":"找工作啊啊啊啊/项目梳理/个人健康管理agent/3.把记忆与知识汇成证据/1.总览.md","x":1200,"y":30,"width":360,"height":200,"color":"5"},
+		{"id":"a1b2c3d4e5f67906","type":"file","file":"找工作啊啊啊啊/项目梳理/个人健康管理agent/4.给工具调用一个稳定身份/1.总览.md","x":400,"y":555,"width":360,"height":180,"color":"5"},
+		{"id":"a1b2c3d4e5f67907","type":"file","file":"找工作啊啊啊啊/项目梳理/个人健康管理agent/5.把编排责任交还 Supervisor/1.总览.md","x":960,"y":490,"width":360,"height":200,"color":"5"},
+		{"id":"a1b2c3d4e5f67908","type":"file","file":"找工作啊啊啊啊/项目梳理/个人健康管理agent/6.为任务消耗设置预算/1.总览.md","x":1440,"y":360,"width":360,"height":200,"color":"5"}
 	],
 	"edges":[
 		{"id":"b1b2c3d4e5f67901","fromNode":"a1b2c3d4e5f67902","fromSide":"right","toNode":"a1b2c3d4e5f67903","toSide":"left","label":"第一章（已整理）"},
