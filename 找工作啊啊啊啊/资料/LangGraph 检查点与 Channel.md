@@ -1,0 +1,128 @@
+---
+tags:
+  - 框架/LangGraph
+类型: 概念笔记
+核心概念: Channel / Superstep / Checkpoint / CheckpointTuple / PostgresSaver
+状态: 已整理
+---
+
+> [!info] 概念归属
+> 本笔记是 LangGraph 框架「Channel 与检查点（Checkpoint）」的唯一归属地：channel 的含义与更新策略、superstep 调度、Checkpoint 数据结构、中断持久化、PostgresSaver 落库。纯框架知识，不绑定具体业务项目；健康管理项目对检查点的使用与控制索引的分工见 [[5.Task Runtime、Checkpoint 和业务状态#LangGraph 检查点语义]]。
+
+# LangGraph 检查点与 Channel
+
+## Channel：图状态的槽位
+
+channel 是 LangGraph 图状态（Graph State）的一个槽位。写图时定义的 State schema——TypedDict 或 Pydantic 模型——里的每个键，在运行时就是一个 channel：定义了 `messages` 和 `plan_status` 两个键，图里就有两个 channel。
+
+叫 channel（通道）而不叫字段，是因为它的通信语义。LangGraph 的执行模型借鉴 Google 的 Pregel 图计算模型：节点之间不互相调用，也不共享内存变量，唯一的信息交换方式就是读 channel、写 channel。节点执行完返回一个 dict，这个 dict 不是「修改状态」，而是「向这些 channel 提交一次写入」——一个节点写进去，后面的节点从里面读，数据流沿 channel 流动，而不是沿函数调用流动。
+
+每个 channel 由三样东西构成：
+
+```text
+一个 channel
+    当前值      # channel_values 里对应的那一项：messages 的消息列表、plan_status 的字符串
+    版本号      # channel_versions 里对应的那一项：每次被写入单调递增的字符串
+    更新策略    # reducer：新写入怎么和旧值合并
+```
+
+更新策略（reducer）决定节点写入时发生什么，这是 channel 区别于普通字典的关键：
+
+```python
+from typing import Annotated
+from typing_extensions import TypedDict
+from langgraph.graph import add_messages
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]   # 追加式：每个节点写入的消息都合并进列表，不互相覆盖
+    plan_status: str                          # 默认 LastValue：最后一次写入直接替换旧值
+```
+
+- 默认策略是 LastValue：新值替换旧值。适合「最新状态」这类语义——`plan_status` 只关心现在是什么状态。
+- 用 `Annotated[类型, reducer]` 声明其他策略。`add_messages` 把每个节点产生的消息追加合并——messages 必须用追加式，若用覆盖式，后一个节点一写，前一个节点的消息就丢了。
+- `BinaryOperatorAggregate` 提供二元运算聚合，比如 `(a, b) => a + b` 的累加。
+
+LastValue 一个 superstep 只允许写一次：同一轮里两个节点都往同一个 LastValue channel 写「最后值」，谁是最后没有定义，LangGraph 直接判定为冲突。
+
+## Superstep 与版本差分调度
+
+LangGraph 把图的执行切成一轮轮 superstep（超步）。一轮的过程：
+
+```text
+一轮 superstep
+    1. 引擎选出本轮要执行的节点并运行
+    2. 节点向 channel 提交写入，本轮写过的 channel 版本 +1
+    3. 同步边界：写入生效，引擎差分决定下一轮执行谁
+```
+
+「下一轮执行谁」由版本差分算出：每个 channel 有当前版本（`channel_versions`），每个节点记录着自己上次执行时各 channel 的版本（`versions_seen`）。一个 channel 的版本超过了某个节点看过的版本，说明有它没消费过的新数据，该节点进入下一轮的执行名单。这就是「图执行到哪了」在数据上的真实形态——不是存了一个「下一步节点」字段，而是靠版本号每轮现算。
+
+理解了这一点，检查点里为什么满是版本号就不再奇怪：版本号就是图的调度依据，快照要支持恢复，就必须把调度依据存下来。
+
+## Checkpoint：快照的数据结构
+
+检查点（Checkpoint）是 LangGraph 在 superstep 边界保存的运行快照，类型是一个官方 TypedDict：
+
+```text
+Checkpoint（LangGraph 官方 TypedDict）
+    v                 # 检查点格式版本号
+    id                # 本份快照的 checkpoint ID（uuid）
+    ts                # 快照时间戳
+    channel_values    # 各 channel 当时的值
+    channel_versions  # 各 channel 当时的版本号
+    versions_seen     # 每个节点已看过各 channel 的哪个版本
+    updated_channels  # 本次相对上一份快照有更新的 channel 列表
+```
+
+注意没有「下一个要执行的节点」字段：恢复时引擎重新做一次版本差分——`channel_versions` 对 `versions_seen`，有新数据的节点就是继续执行的对象。存储里只有状态与版本，调度每次现算。
+
+checkpointer 对外按 `CheckpointTuple`（NamedTuple）交付一条记录：
+
+```text
+CheckpointTuple（checkpointer 的交付形态）
+    config          # 定位本份快照：thread_id、checkpoint_ns、checkpoint_id
+    checkpoint      # 上面的快照本体
+    metadata        # source（input/loop/update/fork，快照来源）、step（superstep 计数）、parents、run_id
+    parent_config   # 上一份快照的定位——快照之间靠它连成链，历史回退沿它走
+    pending_writes  # 待处理写入：节点已提交、尚未生效的写入
+```
+
+快照按 thread 归档：同一个 `thread_id` 下的快照用 `parent_config` 链成一条历史，每个 superstep 追加一份，旧快照保留，所以检查点天然带历史版本、可以回退。
+
+## 中断与恢复
+
+`interrupt()` 让图停在一个节点上等待外部输入。停在 interrupt 上时，中断现场随当份快照一起持久化：中断标记和恢复值作为特殊写入进入 pending writes（写入索引里 INTERRUPT 与 RESUME 是负数索引，区别于普通写入）。业务侧放在 `interrupt()` 里的载荷就是中断现场的内容，恢复后原样取回。
+
+恢复用 `Command(resume=值)`：引擎定位到停住的节点，带着 resume 值重新进入该节点，节点内 `interrupt()` 的调用处返回这个值，执行从断点后继续。包含 interrupt 的节点是重新执行而不是从下一节点继续，所以中断前的动作应当已经固化，不能放在中断节点里现做——否则每次重入都会新建一次。
+
+## PostgresSaver 落库
+
+PostgresSaver 把上述结构落成三张表：
+
+```text
+checkpoints        # 快照本体，PK(thread_id, checkpoint_ns, checkpoint_id)
+                   # parent_checkpoint_id 连成快照链；checkpoint 与 metadata 存 JSONB，
+                   # 原始类型（str/int/float/bool/None）的 channel 值内联在 JSONB 里
+
+checkpoint_blobs   # 非原始类型的 channel 值，PK(thread_id, checkpoint_ns, channel, version)
+                   # 序列化成字节（BYTEA）按 channel + 版本存
+
+checkpoint_writes  # 待处理写入，PK(thread_id, checkpoint_ns, checkpoint_id, task_id, idx)
+                   # 中断与恢复标记也以负数索引写入这里
+```
+
+序列化默认走 `JsonPlusSerializer`（ormsgpack 编码，回退到扩展 JSON）。三张表的主键都含 `thread_id`——一个执行线程的全部执行现场，靠这个键找回。
+
+## 边界问答
+
+**1. Q：** channel 和普通的状态字典有什么区别？
+**A：** 普通字典只有值，写入就是覆盖。channel 在值之外带版本号和更新策略：没有版本号，引擎无法判断哪个节点还没消费新数据、下一轮该触发谁；没有更新策略，多个节点写同一个键就互相覆盖。版本支撑调度，策略支撑并发写合并。
+
+**2. Q：** 为什么 checkpoint 不存「下一个要执行的节点」？
+**A：** 下一步是由 `channel_versions` 和 `versions_seen` 的差分现算的。快照只需存状态与版本，恢复时重新差分得到继续执行的节点，调度逻辑不用在存储里复刻一份。
+
+**3. Q：** 中断期间图在什么地方「等着」？
+**A：** 没有任何进程在等。图已经停了，等待状态就是最后那份检查点：图位置、channel 值、中断现场都在里面。所谓恢复，是带着 resume 值从这份快照重新进入停住的节点。
+
+**4. Q：** 检查点能不能代替业务持久化？
+**A：** 不能。检查点记录的是图执行到哪、状态是什么；节点对外部系统产生的副作用（写业务库、调外部 API）不因快照存在而可撤销或可确认。执行状态和业务事实是两类数据，快照只管前者。
