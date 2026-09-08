@@ -1,6 +1,4 @@
 {
-  "accentColor": "#f57b5c",
-  "textFontFamily": "微软雅黑",
-  "baseFontSize": 17,
-  "theme": "obsidian"
+  "theme": "obsidian",
+  "accentColor": "#fb6423"
 }
